@@ -83,4 +83,3 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 
      - [Spotipy](https://spotipy.readthedocs.io/en/2.19.0/#)
      - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
-     ```
