@@ -73,7 +73,7 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 
      ## License
 
-     This project is licensed under the MIT License. See the [LICENSE](https://opensource.org/license/mit) file for details.
+     This project is licensed under the MIT License. See the [LICENSE](License) file for details.
 
      ## Contributing
 
