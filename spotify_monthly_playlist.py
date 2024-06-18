@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 import webbrowser
 import os
 from flask import Flask, request
+from threading import Thread
 
 # Ensure the environment variables are set
 SPOTIPY_CLIENT_ID = os.getenv('SPOTIPY_CLIENT_ID')
@@ -13,12 +14,11 @@ SPOTIPY_REDIRECT_URI = os.getenv('SPOTIPY_REDIRECT_URI')
 # Verification of environment variables
 if not SPOTIPY_CLIENT_ID or not SPOTIPY_CLIENT_SECRET or not SPOTIPY_REDIRECT_URI:
     raise ValueError(
-        "Missing environment variables: "
-        "Ensure SPOTIPY_CLIENT_ID, SPOTIPY_CLIENT_SECRET, and SPOTIPY_REDIRECT_URI are set.")
+        "Missing environment variables: Ensure SPOTIPY_CLIENT_ID, "
+        "SPOTIPY_CLIENT_SECRET, and SPOTIPY_REDIRECT_URI are set.")
 
 print("Client ID and Client Secret found.")
-print(f"Client ID: {SPOTIPY_CLIENT_ID}")
-print(f"Client Secret: {SPOTIPY_CLIENT_SECRET}")
+
 
 scope = 'user-library-read playlist-modify-public playlist-modify-private'
 
@@ -46,6 +46,7 @@ def authenticate_spotify():
     cached_token = sp_oauth.get_cached_token()
     if not cached_token:
         auth_url = sp_oauth.get_authorize_url()
+        print(f"Please navigate here to authorize: {auth_url}")
         webbrowser.open(auth_url)
         app.run(port=8888)
     else:
@@ -69,23 +70,41 @@ def create_monthly_playlist(sp, month_year):
     return playlist_id
 
 
-def add_saved_tracks_to_playlist(sp, month_year):
+def get_saved_tracks_for_month(sp, year, month):
+    results = sp.current_user_saved_tracks(limit=50)
+    tracks = []
+
+    while results:
+        for item in results['items']:
+            added_at = datetime.strptime(item['added_at'], "%Y-%m-%dT%H:%M:%SZ")
+            if added_at.year == year and added_at.month == month:
+                tracks.append(item['track']['id'])
+        if results['next']:
+            results = sp.next(results)
+        else:
+            results = None
+
+    return tracks
+
+
+def add_saved_tracks_to_playlist(sp, month_year, year, month):
     playlist_id = create_monthly_playlist(sp, month_year)
 
-    # Get the saved tracks
-    saved_tracks = sp.current_user_saved_tracks()
+    # Get the saved tracks for the specified month
+    track_ids = get_saved_tracks_for_month(sp, year, month)
 
-    track_ids = [item['track']['id'] for item in saved_tracks['items']]
-
-    # Add tracks to the playlist
-    sp.playlist_add_items(playlist_id, track_ids)
-
-    print(f'Added {len(track_ids)} tracks to the playlist "{month_year}".')
+    # Add tracks to the playlist in reverse order
+    if track_ids:
+        track_ids.reverse()
+        sp.playlist_add_items(playlist_id, track_ids)
+        print(f'Added {len(track_ids)} tracks to the playlist "{month_year}".')
+    else:
+        print(f'No tracks to add for {month_year}.')
 
 
 def get_month_year(months_ago=0):
     target_date = datetime.now() - timedelta(days=30 * months_ago)
-    return target_date.strftime("%B '%y")
+    return target_date.strftime("%B '%y"), target_date.year, target_date.month
 
 
 def main():
@@ -101,9 +120,14 @@ def main():
         retroactive_months = 0
 
     for months_ago in range(retroactive_months + 1):
-        month_year = get_month_year(months_ago)
-        add_saved_tracks_to_playlist(sp, month_year)
+        month_year, year, month = get_month_year(months_ago)
+        add_saved_tracks_to_playlist(sp, month_year, year, month)
 
 
 if __name__ == "__main__":
+    # Run the Flask app in a separate thread to ensure the main script waits for authentication to complete
+    flask_thread = Thread(target=authenticate_spotify)
+    flask_thread.start()
+    flask_thread.join()  # Wait for the Flask app to complete authentication
+
     main()
