@@ -28,26 +28,26 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
         pip install spotipy Flask
         ```
 
-     3. **Set up Spotify Developer Account:**
-        - Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications).
-        - Create a new app and note down the `Client ID` and `Client Secret`.
-        - Set the Redirect URI to `http://localhost:8888/callback`.
+3. **Set up Spotify Developer Account:**
+   - Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications).
+   - Create a new app and note down the `Client ID` and `Client Secret`.
+   - Set the Redirect URI to `http://localhost:8888/callback`.
 
-     4. **Set environment variables:**
-        - On Windows:
-          ```sh
-          setx SPOTIPY_CLIENT_ID "your_client_id"
-          setx SPOTIPY_CLIENT_SECRET "your_client_secret"
-          setx SPOTIPY_REDIRECT_URI "http://localhost:8888/callback"
-          ```
-        - On macOS/Linux:
-          ```sh
-          export SPOTIPY_CLIENT_ID="your_client_id"
-          export SPOTIPY_CLIENT_SECRET="your_client_secret"
-          export SPOTIPY_REDIRECT_URI="http://localhost:8888/callback"
-          ```
+4. **Set environment variables:**
+   - On Windows:
+      ```sh
+      setx SPOTIPY_CLIENT_ID "your_client_id"
+      setx SPOTIPY_CLIENT_SECRET "your_client_secret"
+      setx SPOTIPY_REDIRECT_URI "http://localhost:8888/callback"
+      ```
+   - On macOS/Linux:
+      ```sh
+      export SPOTIPY_CLIENT_ID="your_client_id"
+      export SPOTIPY_CLIENT_SECRET="your_client_secret"
+      export SPOTIPY_REDIRECT_URI="http://localhost:8888/callback"
+      ```
 
-     ## Usage
+## Usage
 
      1. **Run the script:**
         ```sh
@@ -61,7 +61,7 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
      3. **Create Playlists:**
         - Enter the number of past months you want to create playlists for (e.g., enter `0` to create only the current month's playlist).
 
-     ## Example
+## Example
 
      ```sh
      python spotify_monthly_playlist_creator.py
@@ -75,7 +75,7 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 
      This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-     ## Contributing
+## Contributing
 
      Contributions are welcome! Please open an issue or submit a pull request.
 
