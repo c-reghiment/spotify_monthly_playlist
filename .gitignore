@@ -1,3 +1,8 @@
 
 .cache
 .idea/misc.xml
+build/spotify_monthly_playlist/base_library.zip
+build/spotify_monthly_playlist/Analysis-00.toc
+build/spotify_monthly_playlist/COLLECT-00.toc
+build/spotify_monthly_playlist/EXE-00.toc
+/build
