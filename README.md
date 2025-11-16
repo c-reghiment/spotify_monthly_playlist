@@ -6,13 +6,12 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 
 - **Monthly Playlists:** Automatically creates a playlist for each month and adds the songs saved in that month.
 - **Retroactive Playlists:** Optionally create playlists for past months and add the respective songs saved during those months.
-- **Automatic Token Retrieval:** Uses Flask to handle Spotify authentication and capture the token seamlessly.
+- **Automatic Token Retrieval:** Uses Spotipy's built-in local web server to capture the auth token seamlessly.
 - **Reverse Order Addition:** Adds tracks in reverse order to the playlist to maintain the order they were saved.
 
 ## Prerequisites
 
 - Python 3.x
-- Flask
 - Spotipy
 - Spotify Developer Account
 
@@ -21,12 +20,13 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 1. **Clone the repository:**
    ```sh
    git clone https://github.com/c-reghiment/spotify_monthly_playlist.git
-   cd spotify-monthly-playlist-creator
+   cd spotify_monthly_playlist
+   ```
 
 2. **Install the required Python libraries:**
-        ```sh
-        pip install spotipy Flask
-        ```
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 3. **Set up Spotify Developer Account:**
    - Go to the [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/applications).
@@ -50,26 +50,26 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 ## Usage
 
    1. **Run the script:**
-        ```sh
-        python spotify_monthly_playlist_creator.py
-        ```
+      ```sh
+      python spotify_monthly_playlist.py
+      ```
 
    2. **Authenticate with Spotify:**
-        - The script will open a browser window to prompt for Spotify login and authorization.
-        - After logging in, copy the URL you are redirected to and paste it back into the terminal.
+      - A browser window opens automatically for Spotify login and authorization.
+      - If the browser does not open, copy the URL from the terminal into your browser manually.
 
    3. **Create Playlists:**
-        - Enter the number of past months you want to create playlists for (e.g., enter `0` to create only the current month's playlist).
+      - After authentication, enter how many past months you want to process (enter `0` for the current month only).
 
 ## Example
 
    ```sh
-     python spotify_monthly_playlist_creator.py
+   python spotify_monthly_playlist.py
    ```
 
-   - The script will prompt you to authenticate with Spotify.
-   - After authentication, enter the number of past months you want to create playlists for.
-   - The script will create the playlists and add the saved songs for each specified month.
+   - The script guides you through Spotify authentication.
+   - Enter the number of past months to include.
+   - Playlists are created (or reused) and populated with the saved songs from each selected month.
 
 ## License
 
@@ -81,5 +81,4 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
 
 ## Acknowledgments
 
-     - [Spotipy](https://spotipy.readthedocs.io/en/2.19.0/#)
-     - [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+     - [Spotipy](https://spotipy.readthedocs.io/)
