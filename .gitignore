@@ -1,4 +1,4 @@
-.idea
+/.idea
 .cache
 .idea/misc.xml
 build/spotify_monthly_playlist/base_library.zip
