@@ -71,6 +71,43 @@ This Python script creates monthly playlists on Spotify and adds the songs you s
    - Enter the number of past months to include.
    - Playlists are created (or reused) and populated with the saved songs from each selected month.
 
+## API Server
+
+For the upcoming React UI you can run the new Flask API alongside the CLI:
+
+1. Ensure the environment variables listed above are configured plus an optional `FLASK_SECRET_KEY`, `FRONTEND_URL`, and `AUTH_SUCCESS_REDIRECT` (defaults target `http://localhost:5173`).
+2. Install dependencies (`pip install -r requirements.txt`).
+3. Start the server:
+   ```sh
+   python api.py
+   ```
+
+Key endpoints:
+- `GET /auth/login` – returns the Spotify authorize URL; open it in the browser to sign in.
+- `GET /auth/callback` – Spotify redirects here; the server stores the token and redirects to `AUTH_SUCCESS_REDIRECT`.
+- `GET /auth/status` – indicates whether the current session is authenticated.
+- `GET /api/playlists` – lists the user's playlists (requires authentication).
+- `GET /api/monthly-preview?months=2` – shows counts for the current month plus the previous two months.
+- `POST /api/create-playlists` – body `{"months": 2}` creates playlists for the chosen months.
+
+## Web UI
+
+The `web/` directory now includes a Vite + React + Tailwind client that talks directly to the Flask API.
+
+1. Start the API server from the previous section (defaults to `http://localhost:5000`).
+2. Configure the frontend endpoint (optional if you use the default):
+   ```sh
+   cd web
+   cp .env.example .env.local
+   # edit VITE_API_BASE if your API runs on a different host/port
+   ```
+3. Install dependencies and run the dev server:
+   ```sh
+   npm install
+   npm run dev
+   ```
+4. Visit the printed URL (usually `http://localhost:5173`). Use the "Log in with Spotify" button to start OAuth, preview playlist data via `/api/monthly-preview`, and trigger creation via `/api/create-playlists`.
+
 ## License
 
    This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
